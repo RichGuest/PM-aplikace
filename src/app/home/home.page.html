@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Dostupnost filmů a seriálů v Americe
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,8 +13,66 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div id="search-section">
+    <ion-segment [(ngModel)]="contentType">
+      <ion-segment-button value="series">
+        <ion-label>Seriál</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="movie">
+        <ion-label>Film</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+
+
+
+    <ion-item>
+      <ion-label position="floating">Název</ion-label>
+      <ion-input [(ngModel)]="searchTerm" type="Vyhledávání"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" (click)="search()">Check Availability</ion-button>
+
+  </div>
+
+
+
+
+  <div id="search-section">
+    <!-- ... Vaše stávající kód pro vyhledávání ... -->
+  </div>
+
+  <!-- Results Section -->
+  <div id="results-section">
+    <ion-list *ngIf="searchData && searchData.length > 0">
+      <ion-grid>
+        <!-- Hlavička tabulky -->
+        <ion-row>
+          <ion-col size="2"><strong>Title</strong></ion-col>
+          <ion-col size="2"><strong>Year</strong></ion-col>
+          <ion-col size="3"><strong>Režisér</strong></ion-col>
+          <ion-col size="3"><strong>Dostupné na</strong></ion-col>
+        </ion-row>
+
+        <!-- Data tabulky -->
+        <ion-row *ngFor="let item of searchData">
+          <ion-col *ngIf="item.type === contentType" size="2">{{ item.title }}</ion-col>
+          <ion-col *ngIf="item.type === contentType" size="2">{{ item.year || item.firstAirYear }}</ion-col>
+          <ion-col *ngIf="item.type === contentType" size="3">{{ item.directors || item.creators }}</ion-col>
+          <ion-col *ngIf="item.type === contentType" size="3">
+            <div *ngIf="item.uniqueServices && item.uniqueServices.length > 0" class="services-container">
+              <ion-chip *ngFor="let service of item.uniqueServices">
+                <a [href]="service.url" target="_blank">{{ service.name }}</a>
+              </ion-chip>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+
+    <!-- Pokud nejsou nalezeny žádné výsledky -->
+    <ion-note *ngIf="!searchData || searchData.length === 0">
+      No results found.
+    </ion-note>
   </div>
 </ion-content>
