@@ -21,6 +21,12 @@ export class HomePage implements OnInit {
     
   }
 
+  toggleDarkMode() {
+    document.body.classList.toggle('dark', !document.body.classList.contains('dark'));
+  }
+
+  
+
   search() {
    
     this.loadData(this.searchTerm, this.contentType);
